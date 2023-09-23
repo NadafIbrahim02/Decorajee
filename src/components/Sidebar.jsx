@@ -92,7 +92,7 @@ const Sidebar = ({ setCollapeValue }) => {
             <ConfigProvider
               theme={{
                 token: {
-                  colorPrimary: localStorage.getItem("colorMode"),
+                  colorPrimary: localStorage.getItem("colorMode") ?? "#1A97F5",
                 },
               }}
             >

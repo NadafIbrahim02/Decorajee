@@ -16,7 +16,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
       type="button"
       onClick={() => customFunc()}
       style={{ color }}
-      className="relative text-xl rounded-full p-3 hover:bg-light-gray"
+      className="relative text-xl rounded-full p-3 hover:bg-light-gray dark:hover:bg-secondary-dark-bg"
     >
       <span
         style={{ background: dotColor }}
@@ -97,7 +97,7 @@ const Navbar = ({ setCollapeValue }) => {
         />
         <TooltipComponent content="Profile" position="BottomCenter">
           <div
-            className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
+            className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray dark:hover:bg-secondary-dark-bg rounded-lg"
             onClick={() => {
               setOpenBoxes(OpenBoxes === "userProfile" ? " " : "userProfile");
             }}
@@ -108,8 +108,8 @@ const Navbar = ({ setCollapeValue }) => {
               alt="user-profile"
             />
             <p>
-              <span className="text-gray-400 text-14">Hi,</span>{" "}
-              <span className="text-gray-800 font-semibold ml-1 text-14">
+              <span className="text-gray-400 text-14">Hi,</span>
+              <span className="text-gray-800 dark:text-white font-semibold ml-1 text-14">
                 {Data.name}
               </span>
             </p>

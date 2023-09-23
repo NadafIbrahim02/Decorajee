@@ -299,7 +299,6 @@ function CustomSofaCategory() {
       })
       .catch((error) => console.log("error", error));
   };
-  console.log(ApiFormData);
 
   const GetMainCategories = () => {
     var requestOptions = {
