@@ -61,10 +61,10 @@ const App = () => {
             </div>
             {activeMenu ? (
               <div
-                className={CollapeValue ? "w-20" : "w-52"}
+                className={CollapeValue ? "w-20 " : "w-52"}
                 style={{ transition: "0.5s" }}
               >
-                <div className=" fixed sidebar  dark:bg-secondary-dark-bg bg-white ">
+                <div className=" fixed sidebar dark:bg-secondary-dark-bg bg-white ">
                   <Sidebar setCollapeValue={setCollapeValue} />
                 </div>
               </div>
