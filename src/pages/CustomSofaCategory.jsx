@@ -3,7 +3,6 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useStateContext } from "../contexts/ContextProvider";
 import toast, { Toaster } from "react-hot-toast";
-import FoamListing from "../components/FoamListing";
 import CustomSofaCategoryListing from "../components/CustomSofaCategoryListing";
 function CustomSofaCategory() {
   const [Img, setImg] = useState("");
@@ -156,7 +155,6 @@ function CustomSofaCategory() {
       return el.id === id;
     });
     setSingleArray(SingleArray);
-
     setApiFormData(SingleArray[0]);
     setWidthArreyUpdate(JSON.parse(SingleArray[0].width));
   };
