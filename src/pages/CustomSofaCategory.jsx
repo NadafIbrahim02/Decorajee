@@ -18,6 +18,7 @@ function CustomSofaCategory() {
   const [ImagesInArray, setImagesInArray] = useState({});
   const [MainCategories, setMainCategories] = useState([]);
   const [TwoImage, setTwoImage] = useState({});
+  const [WidthArreyUpdate, setWidthArreyUpdate] = useState([]);
   const [WidthArray, setWidthArray] = useState([
     { title: "Extra Small", size: "", image: "" },
     { title: "Small", size: "", image: "" },
@@ -116,7 +117,7 @@ function CustomSofaCategory() {
                   position: "top-center",
                   reverseOrder: false,
                 });
-                window.location.reload(); 
+                window.location.reload();
               }
             })
             .catch((error) => console.log("error", error));
@@ -155,12 +156,9 @@ function CustomSofaCategory() {
       return el.id === id;
     });
     setSingleArray(SingleArray);
-    setApiFormData({
-      ...ApiFormData,
-      ["title"]: SingleArray[0].title,
-      ["type"]: SingleArray[0].type,
-      ["category_image"]: SingleArray[0].category_image,
-    });
+
+    setApiFormData(SingleArray[0]);
+    setWidthArreyUpdate(JSON.parse(SingleArray[0].width));
   };
   const HandleOnUpdate = async (e) => {
     e.preventDefault();
@@ -188,6 +186,8 @@ function CustomSofaCategory() {
           ["category_image"]: "",
           ["type"]: "",
           ["title"]: "",
+          ["front_image"]: "",
+          ["back_image"]: "",
         });
 
         if (result.status === 200) {
@@ -298,8 +298,6 @@ function CustomSofaCategory() {
       })
       .catch((error) => console.log("error", error));
   };
-  console.log(ApiFormData);
-
   const GetMainCategories = () => {
     var requestOptions = {
       method: "GET",
@@ -322,7 +320,6 @@ function CustomSofaCategory() {
 
     setWidthArray(Arr);
   };
-  console.log("WidthArray", WidthArray);
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />
@@ -341,15 +338,26 @@ function CustomSofaCategory() {
               />
             </div>
             <div class="relative z-0 w-full mb-6 group">
-              <input
-                type="number"
-                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value={ApiFormData.type}
+              <select
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 onChange={(e) =>
                   setApiFormData({ ...ApiFormData, ["type"]: e.target.value })
                 }
-              />
+              >
+                <option selected value={ApiFormData.type}>
+                  {MainCategories.map((el) =>
+                    el.id == ApiFormData.type ? el.title : ""
+                  )}
+                </option>
+                {MainCategories &&
+                  MainCategories.map((Type, ind) => {
+                    return (
+                      <option key={ind} value={Type.id}>
+                        {Type.title}
+                      </option>
+                    );
+                  })}
+              </select>
             </div>
             <div class="relative z-0 w-full mb-6 group flex ">
               <img
@@ -373,6 +381,112 @@ function CustomSofaCategory() {
                   {ButtonLoading ? <Spin indicator={antIcon} /> : "Upload"}
                 </span>
               ) : null}
+            </div>
+            <p className="mb-3 mt-5 text-sm text-gray-400">
+              Size And Dimensions:-
+            </p>
+            {WidthArreyUpdate.width.map((el, index) => {
+              return (
+                <div
+                  className="flex justify-center items-center w-full gap-5"
+                  key={index}
+                >
+                  <div class="relative z-0 w-full mb-6 group">
+                    <span className="text-sm font-semibold">{el.title}</span>
+                  </div>
+                  <div class="relative z-0 w-full mb-6 group">
+                    <input
+                      type="text"
+                      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                      placeholder=""
+                      value={el.size}
+                      onChange={(e) => HandleChangeSize(e.target.value, index)}
+                    />
+                    <label
+                      for="floating_email"
+                      class="peer-focus:font-medium absolute text-sm text-gray-500  dark:text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                      Enter Size
+                    </label>
+                  </div>
+                  <div class="relative z-0 w-full mb-6 group flex">
+                    <input
+                      type="file"
+                      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                      placeholder=""
+                      onChange={(e) =>
+                        setImagesInArray({
+                          ...ImagesInArray,
+                          [index]: e.target.files[0],
+                        })
+                      }
+                    />
+                    {ImagesInArray[index] ? (
+                      <span
+                        onClick={() => HandleImagesUpload(index)}
+                        className="py-2 cursor-pointer bg-black rounded-r-xl text-white px-4 flex justify-center items-center"
+                      >
+                        {ImagesLoading === index ? (
+                          <Spin indicator={antIcon} />
+                        ) : (
+                          "Upload"
+                        )}
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <img src={Base_Url + el.image} className="w-[200px]" />
+                  </div>
+                </div>
+              );
+            })}
+            <p className="text-sm font-semibold">Select Front Image</p>
+            <div class="relative z-0 w-full mb-6 group flex ">
+              <input
+                type="file"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                onChange={(e) =>
+                  setTwoImage({ ...TwoImage, [0]: e.target.files[0] })
+                }
+              />
+              {TwoImage[0] ? (
+                <span
+                  onClick={() => newFileUpload(0)}
+                  className="py-2 cursor-pointer bg-black rounded-r-xl text-white px-4 flex justify-center items-center"
+                >
+                  {ButtonLoading ? <Spin indicator={antIcon} /> : "Upload"}
+                </span>
+              ) : null}
+              <div className="flex justify-center items-center">
+                <img
+                  src={Base_Url + SingleArray[0].front_image}
+                  className="w-[200px]"
+                />
+              </div>
+            </div>
+            <p className="text-sm font-semibold">Select Back Image</p>
+            <div class="relative z-0 w-full mb-6 group flex ">
+              <input
+                type="file"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                onChange={(e) =>
+                  setTwoImage({ ...TwoImage, [1]: e.target.files[0] })
+                }
+              />
+              {TwoImage[1] ? (
+                <span
+                  onClick={() => newFileUpload(1)}
+                  className="py-2 cursor-pointer bg-black rounded-r-xl text-white px-4 flex justify-center items-center"
+                >
+                  {ButtonLoading ? <Spin indicator={antIcon} /> : "Upload"}
+                </span>
+              ) : null}
+              <div className="flex justify-center items-center">
+                <img
+                  src={Base_Url + SingleArray[0].back_image}
+                  className="w-[200px]"
+                />
+              </div>
             </div>
             <button
               type="submit"
@@ -418,18 +532,6 @@ function CustomSofaCategory() {
                     );
                   })}
               </select>
-              {/* <input
-                type="number"
-                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value={ApiFormData.type}
-              /> */}
-              {/* <label
-                for="floating_password"
-                class="peer-focus:font-medium absolute text-sm text-gray-500  dark:text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Select Type
-              </label> */}
             </div>
             <div class="relative z-0 w-full mb-6 group flex ">
               <input
@@ -565,6 +667,7 @@ function CustomSofaCategory() {
       ) : (
         <CustomSofaCategoryListing
           Data={Data}
+          MainCategories={MainCategories}
           GetAllData={GetAllData}
           setComponentLoader={setComponentLoader}
           handleUpdateUser={handleUpdateUser}

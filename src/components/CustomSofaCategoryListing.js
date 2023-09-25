@@ -8,6 +8,7 @@ function CustomSofaCategoryListing({
   GetAllData,
   setComponentLoader,
   handleUpdateUser,
+  MainCategories,
 }) {
   const { Base_Url, currentMode } = useStateContext();
   const [Search, setSearch] = useState("");
@@ -33,18 +34,41 @@ function CustomSofaCategoryListing({
       },
     },
     {
-      title: <div className="text-center dark:text-white text-sm">Type</div>,
+      title: (
+        <div className="text-center dark:text-white text-sm">Main Category</div>
+      ),
       dataIndex: "type",
       render: (t) => (
-        <div className="text-center dark:text-white text-sm">{t}</div>
+        <div className="text-center dark:text-white text-sm">
+          {MainCategories.map((el) => (el.id == t ? el.title : ""))}
+        </div>
       ),
-      sorter: {
-        compare: (a, b) => a.type - b.type,
-      },
     },
     {
       title: <div className="text-center dark:text-white text-sm">Image</div>,
       dataIndex: "category_image",
+      render: (t) => (
+        <div className="flex justify-center items-center dark:text-white">
+          <img className="h-12 w-12" src={Base_Url + t} alt="" />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <div className="text-center dark:text-white text-sm">FrontImage</div>
+      ),
+      dataIndex: "front_image",
+      render: (t) => (
+        <div className="flex justify-center items-center dark:text-white">
+          <img className="h-12 w-12" src={Base_Url + t} alt="" />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <div className="text-center dark:text-white text-sm">BackImage</div>
+      ),
+      dataIndex: "back_image",
       render: (t) => (
         <div className="flex justify-center items-center dark:text-white">
           <img className="h-12 w-12" src={Base_Url + t} alt="" />
@@ -60,7 +84,7 @@ function CustomSofaCategoryListing({
         <div className="text-center dark:text-white text-sm">{t}</div>
       ),
     },
-    {
+    {                                                                                                                                                                                                                                 
       title: <div className="text-center dark:text-white text-sm">Action</div>,
       dataIndex: "id",
       render: (t) => (
