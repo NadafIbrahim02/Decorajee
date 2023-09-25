@@ -19,11 +19,11 @@ function CustomSofaCategory() {
   const [MainCategories, setMainCategories] = useState([]);
   const [TwoImage, setTwoImage] = useState({});
   const [WidthArray, setWidthArray] = useState([
-    { title: "Extra Small", image: "" },
-    { title: "Small", image: "" },
-    { title: "Medium", image: "" },
-    { title: "Large", image: "" },
-    { title: "Extra Large", image: "" },
+    { title: "Extra Small", size: "", image: "" },
+    { title: "Small", size: "", image: "" },
+    { title: "Medium", size: "", image: "" },
+    { title: "Large", size: "", image: "" },
+    { title: "Extra Large", size: "", image: "" },
   ]);
   const [ImagesLoading, setImagesLoading] = useState(false);
   const antIcon = (
@@ -111,13 +111,12 @@ function CustomSofaCategory() {
                 ["back_image"]: "",
               });
               if (result.status === 200) {
-                GetAllData();
-                setLoading(false);
                 toast.success("CustomSofaCategory Created Successfully", {
                   duration: 7000, // 7 seconds in milliseconds
                   position: "top-center",
                   reverseOrder: false,
                 });
+                window.location.reload(); 
               }
             })
             .catch((error) => console.log("error", error));
@@ -317,6 +316,13 @@ function CustomSofaCategory() {
       })
       .catch((error) => console.log("error", error));
   };
+  const HandleChangeSize = (value, index) => {
+    const Arr = [...WidthArray];
+    Arr[index].size = value;
+
+    setWidthArray(Arr);
+  };
+  console.log("WidthArray", WidthArray);
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />
@@ -444,14 +450,6 @@ function CustomSofaCategory() {
             <p className="mb-3 mt-5 text-sm text-gray-400">
               Size And Dimensions:-
             </p>
-            {/* <div className="flex mb-5 justify-between items-center">
-              <span
-                className="font-semibold text-sm  py-1 px-4 cursor-pointer bg-green-300 text-green-700 rounded"
-                onClick={HandleAddWidthField}
-              >
-                Add Field
-              </span>
-            </div> */}
             {WidthArray.map((el, index) => {
               return (
                 <div
@@ -459,24 +457,21 @@ function CustomSofaCategory() {
                   key={index}
                 >
                   <div class="relative z-0 w-full mb-6 group">
-                    {/* <input
+                    <span className="text-sm font-semibold">{el.title}</span>
+                  </div>
+                  <div class="relative z-0 w-full mb-6 group">
+                    <input
                       type="text"
                       class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      placeholder=" "
-                      value={el.title}
-                      onChange={(e) => {
-                        const Arr = [...WidthArray];
-                        Arr[index].title = e.target.value;
-                        setWidthArray(Arr);
-                      }}
+                      placeholder=""
+                      onChange={(e) => HandleChangeSize(e.target.value, index)}
                     />
                     <label
-                      for="floating_password"
+                      for="floating_email"
                       class="peer-focus:font-medium absolute text-sm text-gray-500  dark:text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                     >
-                      Enter {el.fieldName}
-                    </label> */}
-                    <span className="text-sm font-semibold">{el.title}</span>
+                      Enter Size
+                    </label>
                   </div>
                   <div class="relative z-0 w-full mb-6 group flex">
                     <input
