@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { ConfigProvider, Table } from "antd";
 import { useStateContext } from "../contexts/ContextProvider";
-import { FaFolder, FaPen, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-
-function FabricListing({
+import { FaPen, FaTrash } from "react-icons/fa";
+function FabricFolderShadeListing({
   Data,
   GetAllData,
   setComponentLoader,
   handleUpdateUser,
 }) {
-  const navigate = useNavigate();
   const { Base_Url, currentMode } = useStateContext();
   const [Search, setSearch] = useState("");
   const columns = [
@@ -36,16 +33,6 @@ function FabricListing({
       },
     },
     {
-      title: <div className=" dark:text-white  text-center text-sm">Price</div>,
-      dataIndex: "price",
-      render: (t) => (
-        <div className=" dark:text-white  text-center text-sm">{t}</div>
-      ),
-      sorter: {
-        compare: (a, b) => a.price - b.price,
-      },
-    },
-    {
       title: <div className=" dark:text-white  text-center text-sm">Image</div>,
       dataIndex: "image",
       render: (t) => (
@@ -64,20 +51,13 @@ function FabricListing({
       ),
     },
     {
-      title: <div className="dark:text-white  text-center text-sm">Count</div>,
-      dataIndex: "count",
-      render: (t) => (
-        <div className=" dark:text-white  text-center text-sm">{t}</div>
-      ),
-    },
-    {
       title: (
         <div className=" dark:text-white  text-center text-sm">Action</div>
       ),
       dataIndex: "id",
       render: (t) => (
-        <div className="flex items-center justify-center  dark:text-white gap-2">
-          <button
+        <div className="flex items-center gap-5 justify-center  dark:text-white ">
+          {/* <button
             onClick={() => HandleDelete(t)}
             className="text-sm rounded-sm py-1 px-3 bg-red-300 cursor-pointer text-red-700"
           >
@@ -88,13 +68,15 @@ function FabricListing({
             className="text-sm rounded-sm py-1 px-3 bg-green-300 cursor-pointer text-green-700"
           >
             Update
-          </button>
-          <button
-            onClick={() => navigate("/FabricFolder/" + t)}
-            className="text-sm rounded-sm py-1 px-3 bg-blue-300 cursor-pointer text-blue-700"
-          >
-            FabricFolder
-          </button>
+          </button> */}
+          <FaTrash
+            className="text-lg hover:text-red-500 cursor-pointer"
+            onClick={() => HandleDelete(t)}
+          />
+          <FaPen
+            className="text-lg hover:text-green-500 cursor-pointer"
+            onClick={() => handleUpdateUser(t)}
+          />
         </div>
       ),
     },
@@ -115,11 +97,14 @@ function FabricListing({
       redirect: "follow",
     };
 
-    fetch(`${Base_Url}customizeSofa/deleteFabric/${id}`, requestOptions)
+    fetch(
+      `${Base_Url}customizeSofa/deleteFabricFolderShade/${id}`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
         if (result.status === 200) {
-          toast.success("Fabric Deleted Successfully", {
+          toast.success("FabricFolder Deleted Successfully", {
             duration: 7000,
             position: "top-center",
             reverseOrder: false,
@@ -129,7 +114,6 @@ function FabricListing({
       })
       .catch((error) => console.log("error", error));
   };
-
   const customTheme = {
     token: {
       colorBgBase: currentMode !== "Light" ? "#33373E" : "",
@@ -166,18 +150,11 @@ function FabricListing({
             type="search"
             id="default-search"
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search By Title, Price, CreatedAt"
+            placeholder="Search By Title, CreatedAt"
             value={Search}
             onChange={(e) => setSearch(e.target.value)}
             required
           />
-          {/* <button
-            type="submit"
-            onClick={HandleSearchClick}
-            className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Search
-          </button> */}
         </div>
       </div>
       <ConfigProvider theme={customTheme}>
@@ -187,7 +164,6 @@ function FabricListing({
             return (
               Search.toLowerCase() === "" ||
               el.title.toLowerCase().includes(Search) ||
-              el.price.toLowerCase().includes(Search) ||
               el.created_at.toLowerCase().includes(Search)
             );
           })}
@@ -198,4 +174,4 @@ function FabricListing({
   );
 }
 
-export default FabricListing;
+export default FabricFolderShadeListing;

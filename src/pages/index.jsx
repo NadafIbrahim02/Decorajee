@@ -22,3 +22,5 @@ export { default as CustomSofaCategory } from "./CustomSofaCategory";
 export { default as MainCategory } from "./MainCategory";
 export { default as Login } from "./Login";
 export { default as NotFound } from "./NotFound";
+export { default as FabricFolder } from "./FabricFolder";
+export { default as FabricFolderShade } from "./FabricFolderShade";

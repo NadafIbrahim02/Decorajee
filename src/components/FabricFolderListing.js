@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ConfigProvider, Table } from "antd";
 import { useStateContext } from "../contexts/ContextProvider";
-import { FaFolder, FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash } from "react-icons/fa";
+import { TbTexture } from "react-icons/tb";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
-function FabricListing({
+function FabricFolderListing({
   Data,
   GetAllData,
   setComponentLoader,
@@ -14,6 +14,7 @@ function FabricListing({
   const navigate = useNavigate();
   const { Base_Url, currentMode } = useStateContext();
   const [Search, setSearch] = useState("");
+  const [Fabric, setFabric] = useState([]);
   const columns = [
     {
       title: <div className="dark:text-white text-center text-sm ">SrNo</div>,
@@ -36,14 +37,13 @@ function FabricListing({
       },
     },
     {
-      title: <div className=" dark:text-white  text-center text-sm">Price</div>,
-      dataIndex: "price",
+      title: <div className=" dark:text-white text-center text-sm">Fabric</div>,
+      dataIndex: "fabric_id",
       render: (t) => (
-        <div className=" dark:text-white  text-center text-sm">{t}</div>
+        <div className=" dark:text-white text-center text-sm">
+          {Fabric.map((el) => (el.id === t ? el.title : ""))}
+        </div>
       ),
-      sorter: {
-        compare: (a, b) => a.price - b.price,
-      },
     },
     {
       title: <div className=" dark:text-white  text-center text-sm">Image</div>,
@@ -52,6 +52,13 @@ function FabricListing({
         <div className="flex justify-center items-center">
           <img className="h-12 w-12" src={Base_Url + t} alt="" />
         </div>
+      ),
+    },
+    {
+      title: <div className=" dark:text-white  text-center text-sm">Count</div>,
+      dataIndex: "count",
+      render: (t) => (
+        <div className=" dark:text-white text-center text-sm">{t}</div>
       ),
     },
     {
@@ -64,19 +71,12 @@ function FabricListing({
       ),
     },
     {
-      title: <div className="dark:text-white  text-center text-sm">Count</div>,
-      dataIndex: "count",
-      render: (t) => (
-        <div className=" dark:text-white  text-center text-sm">{t}</div>
-      ),
-    },
-    {
       title: (
         <div className=" dark:text-white  text-center text-sm">Action</div>
       ),
       dataIndex: "id",
       render: (t) => (
-        <div className="flex items-center justify-center  dark:text-white gap-2">
+        <div className="flex items-center gap-2 justify-center  dark:text-white ">
           <button
             onClick={() => HandleDelete(t)}
             className="text-sm rounded-sm py-1 px-3 bg-red-300 cursor-pointer text-red-700"
@@ -90,10 +90,10 @@ function FabricListing({
             Update
           </button>
           <button
-            onClick={() => navigate("/FabricFolder/" + t)}
+            onClick={() => navigate("/FabricFolderShade/" + t)}
             className="text-sm rounded-sm py-1 px-3 bg-blue-300 cursor-pointer text-blue-700"
           >
-            FabricFolder
+            FolderShade
           </button>
         </div>
       ),
@@ -115,11 +115,11 @@ function FabricListing({
       redirect: "follow",
     };
 
-    fetch(`${Base_Url}customizeSofa/deleteFabric/${id}`, requestOptions)
+    fetch(`${Base_Url}customizeSofa/deleteFabricFolder/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result.status === 200) {
-          toast.success("Fabric Deleted Successfully", {
+          toast.success("FabricFolder Deleted Successfully", {
             duration: 7000,
             position: "top-center",
             reverseOrder: false,
@@ -129,12 +129,28 @@ function FabricListing({
       })
       .catch((error) => console.log("error", error));
   };
-
   const customTheme = {
     token: {
       colorBgBase: currentMode !== "Light" ? "#33373E" : "",
     },
   };
+  useEffect(() => {
+    GetFabrics();
+  }, []);
+  const GetFabrics = () => {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch(`${Base_Url}customizeSofa/getAllFabrics`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setFabric(result.data);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <div className="mx-14 shadow-xl mb-20 ">
       <div className="mt-[12px] drop-shadow-lg w-[99%] my-2">
@@ -166,18 +182,11 @@ function FabricListing({
             type="search"
             id="default-search"
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search By Title, Price, CreatedAt"
+            placeholder="Search By Title, CreatedAt"
             value={Search}
             onChange={(e) => setSearch(e.target.value)}
             required
           />
-          {/* <button
-            type="submit"
-            onClick={HandleSearchClick}
-            className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Search
-          </button> */}
         </div>
       </div>
       <ConfigProvider theme={customTheme}>
@@ -187,7 +196,6 @@ function FabricListing({
             return (
               Search.toLowerCase() === "" ||
               el.title.toLowerCase().includes(Search) ||
-              el.price.toLowerCase().includes(Search) ||
               el.created_at.toLowerCase().includes(Search)
             );
           })}
@@ -198,4 +206,4 @@ function FabricListing({
   );
 }
 
-export default FabricListing;
+export default FabricFolderListing;

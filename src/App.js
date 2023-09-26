@@ -13,6 +13,8 @@ import {
   CustomSofaCategory,
   Ecommerce,
   Fabric,
+  FabricFolder,
+  FabricFolderShade,
   Foam,
   Login,
   MainCategory,
@@ -124,6 +126,22 @@ const App = () => {
                     element={
                       <React.Suspense>
                         <Fabric />
+                      </React.Suspense>
+                    }
+                  />
+                  <Route
+                    path="/FabricFolder/:id"
+                    element={
+                      <React.Suspense>
+                        <FabricFolder />
+                      </React.Suspense>
+                    }
+                  />
+                  <Route
+                    path="/FabricFolderShade/:id"
+                    element={
+                      <React.Suspense>
+                        <FabricFolderShade />
                       </React.Suspense>
                     }
                   />

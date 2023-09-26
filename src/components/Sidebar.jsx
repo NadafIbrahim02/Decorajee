@@ -5,7 +5,7 @@ import { ConfigProvider, Layout, Menu } from "antd";
 import { BsFillDropletFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { GiDeadWood, GiFoam, GiRolledCloth } from "react-icons/gi";
-import { FaList, FaListCheck } from "react-icons/fa6";
+import { FaFolder, FaList, FaListCheck } from "react-icons/fa6";
 import "../App.css";
 const { Sider } = Layout;
 
