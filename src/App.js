@@ -46,7 +46,7 @@ const App = () => {
 
   return (
     <div className={currentMode === "Dark" ? "dark" : ""}>
-      <BrowserRouter basename="/Decorajee">
+      <BrowserRouter basename="/">
         {IsLoggedIn ? (
           <div className="flex relative dark:bg-main-dark-bg">
             <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
