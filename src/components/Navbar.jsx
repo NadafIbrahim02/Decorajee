@@ -25,6 +25,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   </TooltipComponent>
 );
 
+
 const Navbar = ({ setCollapeValue }) => {
   const [OpenBoxes, setOpenBoxes] = useState(false);
   const {
@@ -108,7 +109,7 @@ const Navbar = ({ setCollapeValue }) => {
             <p>
               <span className="text-gray-400 text-14">Hi,</span>
               <span className="text-gray-800 font-semibold ml-1 text-14 dark:text-white  ">
-                {Data.name}
+                {Data ? Data.name : ""}
               </span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />

@@ -24,7 +24,8 @@ import {
 
 const App = () => {
   const [CollapeValue, setCollapeValue] = useState(false);
-  const IsLoggedIn = sessionStorage.getItem("IsLoggedIn");
+  // const IsLoggedIn = sessionStorage.getItem("IsLoggedIn");
+  const IsLoggedIn = true;
   const {
     setCurrentColor,
     setCurrentMode,
